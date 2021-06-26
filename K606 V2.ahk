@@ -5,6 +5,7 @@
 #SingleInstance
 SendMode Input ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
+DEBUG=True
 
 CheckShift()
 {
@@ -23,7 +24,7 @@ CheckShift()
 
     CheckWin()
     {
-        return GetKeyState("LWin", "P")? "#":""
+    return GetKeyState("LWin", "P")? "#":""
     }
     CheckModifiers(WantedResult,baseKey="") {
         global DEBUG
@@ -31,6 +32,13 @@ CheckShift()
         ctrl := CheckControl()
         alt := CheckAlt()
         win := CheckWin() ; Left until I find a way to override win+key events, thanks Microsoft!
+
+        if(DEBUG)
+        {
+            message := "K606 V2: " ctrl alt shift
+            message := (message . WantedResult)
+        }
+
         if(!alt && !ctrl && !shift && !win && baseKey != "") {
             Send, {%baseKey%}
             return
@@ -61,7 +69,7 @@ CapsLock & H:: CheckModifiers("Left") return
 ^!SC035::Send, ^!{Delete}
 
 ; Caps + ` = ` (Since ` is overridden to be ESC)
-CapsLock & SC029:: Send, {SC029}
+CapsLock & SC029:: Send, {SC029} 
 
 ; Caps + Shift + [ = Shift + Home
 CapsLock & [:: CheckModifiers("Home")
